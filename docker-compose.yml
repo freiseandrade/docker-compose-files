@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  drools:
+    image: drools/drools-workbench-showcase:7.55.0.Final
+    ports:
+      - "8080:8080"
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx1024m -Dorg.kie.server.persistence.ds=java:comp/env/jdbc/drools
+      - KIE_SERVER_CONTROLLER_USER=controllerUser
+      - KIE_SERVER_CONTROLLER_PASSWORD=controllerPassword
+      - KIE_SERVER_USER=kieserver
+      - KIE_SERVER_PASSWORD=kieserver
+      - DB_DRIVER=com.mysql.jdbc.Driver
+      - DB_URL=jdbc:mysql://mysql:3306/drools
+      - DB_USER=drools
+      - DB_PASSWORD=drools
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=drools
+      - MYSQL_USER=drools
+      - MYSQL_PASSWORD=droolspassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
